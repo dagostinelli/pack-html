@@ -139,10 +139,15 @@ def _pack_css(css_path, css, root_dir):
 		encoded_resource = make_data_uri(tag_mime, tag_data)
 		return 'url(\"' + encoded_resource + '\")'
 
+	def parseCss(css):
+		css = cssutils.parseString(css)
+		css = css.cssText
+		css = css.decode("utf-8")
+		return css
+
+	css = parseCss(css):
 	css = re.sub('url\((.*)\)', replacer, css, flags=re.IGNORECASE)
-	css = cssutils.parseString(css)
-	css = css.cssText
-	css = css.decode("utf-8")
+	css = parseCss(css):
 
 	return css
 
