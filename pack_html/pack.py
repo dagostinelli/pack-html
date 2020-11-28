@@ -46,6 +46,9 @@ import re
 # disable logging for cssutils
 cssutils.log.setLevel(logging.CRITICAL)
 
+# strip comments
+cssutils.ser.prefs.keepComments = False
+
 
 def _can_encode(resource_url):
 	if os.path.exists(resource_url):
@@ -137,6 +140,9 @@ def _pack_css(css_path, css, root_dir):
 		return 'url(\"' + encoded_resource + '\")'
 
 	css = re.sub('url\((.*)\)', replacer, css, flags=re.IGNORECASE)
+	css = cssutils.parseString(css)
+	css = css.cssText
+	css = css.decode("utf-8")
 
 	return css
 
