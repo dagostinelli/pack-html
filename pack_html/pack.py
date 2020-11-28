@@ -145,9 +145,9 @@ def _pack_css(css_path, css, root_dir):
 		css = css.decode("utf-8")
 		return css
 
-	css = parseCss(css):
+	css = parseCss(css)
 	css = re.sub('url\((.*)\)', replacer, css, flags=re.IGNORECASE)
-	css = parseCss(css):
+	css = parseCss(css)
 
 	return css
 
@@ -187,24 +187,22 @@ def pack(page_path, page_text, **kwargs):
 			else:
 				continue
 
-
 	# gather all the link/stylesheets
 	if not ignore_css:
 		for tag in soup('link'):
-			if not 'stylesheet' in tag['rel']:
+			if 'stylesheet' not in tag['rel']:
 				continue
 
 			tag_url = tag['href']
 			fullpath = _determine_fullpath(page_path, tag_url, root_dir)
 			tag_mime, tag_data = _get_resource(fullpath)
 
-			if not 'css' in tag_mime:
+			if 'css' not in tag_mime:
 				continue
 
 			tag_data = _pack_css(fullpath, tag_data.decode("utf-8"), root_dir)
 			style = soup.new_tag('style', type='text/css')
 			style.append(tag_data)
 			tag.replaceWith(style)
-
 
 	return str(soup)
